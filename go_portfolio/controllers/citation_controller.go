@@ -1,107 +1,87 @@
 package controllers
 
 import (
-	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
-	"time"
 
-	"go_portfolio/databases"
+	"go_portfolio/models"
+	"go_portfolio/services"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type CitationResponse struct {
-	Data     []bson.M `json:"data"`
-	Metadata struct {
-		Total    int `json:"total"`
-		Page     int `json:"page"`
-		PageSize int `json:"page_size"`
-	} `json:"metadata"`
+// CitationController gère les requêtes HTTP pour les citations
+type CitationController struct {
+	service services.CitationService
 }
 
-func GetAllCitations() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Logging de la requête
-		log.Printf("Requête GET /citations reçue")
+// NewCitationController crée une nouvelle instance de CitationController
+func NewCitationController(service services.CitationService) *CitationController {
+	return &CitationController{service: service}
+}
 
-		// Context avec timeout
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
+// GetTheCitations gère la requête GET /citations
+func (c *CitationController) GetTheCitation(ctx *gin.Context) {
+	// Logging de la requête
+	fmt.Printf("Requête GET /citations reçue\n")
 
-		// Vérification de la connexion
-		if databases.Database == nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": "Base de données non disponible",
-			})
-			return
-		}
+	// Récupération des paramètres de pagination
+	pageStr := ctx.Query("page")
+	pageSizeStr := ctx.Query("page_size")
 
-		// Recherche dans la collection
-		collection := databases.Database.Collection("top_citation")
-		if collection == nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": "Collection non trouvée",
-			})
-			return
-		}
-
-		// Configuration de la pagination
-		page, pageSize := 1, 10
-		if p := c.Query("page"); p != "" {
-			page = parseInt(p)
-		}
-		if ps := c.Query("page_size"); ps != "" {
-			pageSize = parseInt(ps)
-		}
-
-		// Création du filtre et de l'option de pagination
-		opts := options.Find()
-		opts.SetSkip(int64((page - 1) * pageSize))
-		opts.SetLimit(int64(pageSize))
-
-		// Exécution de la requête
-		cursor, err := collection.Find(ctx, bson.M{})
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": fmt.Sprintf("Erreur lors de la recherche: %v", err),
-			})
-			return
-		}
-		defer cursor.Close(ctx)
-
-		// Récupération des résultats
-		var results []bson.M
-		if err = cursor.All(ctx, &results); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": fmt.Sprintf("Erreur lors du décodage: %v", err),
-			})
-			return
-		}
-
-		// Création de la réponse structurée
-		response := CitationResponse{
-			Data: results,
-			Metadata: struct {
-				Total    int `json:"total"`
-				Page     int `json:"page"`
-				PageSize int `json:"page_size"`
-			}{
-				Total:    len(results),
-				Page:     page,
-				PageSize: pageSize,
-			},
-		}
-
-		c.JSON(http.StatusOK, response)
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		page = 1
 	}
+
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil || pageSize < 1 {
+		pageSize = 10
+	}
+
+	// Appel du service
+	response, err := c.service.GetTheCitation(ctx, page, pageSize)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Configuration des headers
+	ctx.Header("X-Total-Count", fmt.Sprintf("%d", response.Metadata.Total))
+
+	// Envoi de la réponse
+	ctx.JSON(http.StatusOK, response)
 }
 
-func parseInt(s string) int {
-	n, _ := strconv.Atoi(s)
-	return n
+// UpdateCitation gère la requête pour mettre à jour une citation
+func (c *CitationController) UpdateCitation(ctx *gin.Context) {
+	// Validation de la méthode
+	if ctx.Request.Method != http.MethodPut {
+		ctx.JSON(http.StatusMethodNotAllowed, gin.H{"error": "méthode non autorisée"})
+		return
+	}
+
+	// Récupération de l'ID depuis les paramètres
+	id := ctx.Param("id")
+	if id == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID requis"})
+		return
+	}
+
+	// Lecture du corps de la requête
+	var citation models.Citation
+	if err := ctx.ShouldBindJSON(&citation); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "format de requête invalide"})
+		return
+	}
+	// Appel au service
+	response, err := c.service.UpdateCitation(id, &citation)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Envoi de la réponse
+	ctx.JSON(http.StatusOK, response)
 }

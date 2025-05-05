@@ -10,6 +10,7 @@ import (
 func main() {
 	r := gin.Default()
 	databases.ConnectDatabase()
-	routes.SetupRoutes(r)
+	db := databases.Database
+	routes.SetupRoutes(r, db)
 	r.Run()
 }

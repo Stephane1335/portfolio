@@ -4,24 +4,20 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
-	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
 )
 
 var (
-	client     *mongo.Client
-	Database   *mongo.Database
-	ctx        context.Context
-	cancelFunc context.CancelFunc
+	client   *mongo.Client
+	Database *mongo.Database
+	ctx      context.Context
 )
 
 func ConnectDatabase() error {
 	// Création du context avec timeout
-	ctx, cancelFunc = context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancelFunc()
+	log.Printf("Elle se lance !")
 
 	// Configuration de la connexion
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
@@ -37,11 +33,6 @@ func ConnectDatabase() error {
 		return fmt.Errorf("erreur de connexion à MongoDB: %w", err)
 	}
 
-	// Vérification de la connexion
-	if err = client.Ping(ctx, readpref.Primary()); err != nil {
-		return fmt.Errorf("erreur de ping MongoDB: %w", err)
-	}
-
 	// Initialisation de la base de données
 	Database = client.Database("portfolio")
 	if Database == nil {
@@ -49,6 +40,7 @@ func ConnectDatabase() error {
 	}
 
 	log.Println("Connexion MongoDB établie avec succès")
+	log.Println(Database.Collection("top_citation"))
 	return nil
 }
 
