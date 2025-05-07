@@ -1,0 +1,18 @@
+<div class="skill-inner-box mb-[24px] p-[20px] flex flex-col relative rounded-[100px] max-[420px]:rounded-[50px] bg-[{{skill.color}}]" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="600">
+    <div class="skill-logo transition-all duration-[0.3s] ease-in-out flex justify-end absolute right-[60px] top-[-30px] z-[1] opacity-[0]">
+        <a *ngFor="let techno of skill.techno" href="javascript:void(0)" class="relative h-[30px] w-[30px] mx-[20px] border-[1px] border-solid border-[#111a24] bg-[#fff] rounded-[20px]">
+            <img src="assets/img/about/{{techno}}.png" alt="about-logo-1" class="w-[28px] p-[5px]">
+        </a>
+    </div>
+    <div class="skill-contact inline-flex flex-wrap max-[420px]:flex-col">
+        <svg class="progress noselect w-[90px] h-full bg-transparent inline-block" [attr.data-progress]="skill.level" x="0px" y="0px" viewBox="0 0 80 80"> 
+            <path class="track" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
+            <path class="fill" d="M5,40a35,35 0 1,0 70,0a35,35 0 1,0 -70,0" />
+            <text class="value" x="50%" y="58%">{{skill.level}}%</text>
+        </svg>
+        <div class="skill-box-contact w-[calc(100%-90px)] p-[10px] flex flex-col justify-center max-[420px]:w-full">
+            <h4 class="font-montserrat text-[16px] font-semibold text-[#111a24] mb-[8px] tracking-[0.03rem] leading-[1.2]">{{skill.title}} <span class="text-[13px] font-medium text-[#111a24]"> ({{skill.techno?.join(',')}}) </span></h4>
+            <p class="font-montserrat text-[13px] leading-[22px] text-[#495461] overflow-hidden tracking-[0.03rem] text-ellipsis flex">{{skill.description}}</p>
+        </div>
+    </div>
+</div>
