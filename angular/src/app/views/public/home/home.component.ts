@@ -6,12 +6,18 @@ import { AboutMeService } from '../../../features/aboutme/services/aboutme.servi
 import { SkillComponent } from '../../../shared/components/skill/skill.component';
 import { Skill } from '../../../features/skills/models/skill.model';
 import { SkillService } from '../../../features/skills/services/skill.service';
-import { NgForOf } from '@angular/common';
+import { NgForOf, SlicePipe } from '@angular/common';
+import { TimelineComponent } from '../../../shared/components/timeline/timeline.component';
+import { WhyHireMeService } from '../../../features/whyhireme/services/whyhireme.service';
+import { WhyHireMe } from '../../../features/whyhireme/models/whyhireme.model';
+import { Project } from '../../../features/projects/models/project.model';
+import { ProjectService } from '../../../features/projects/services/project.service';
+
 
 
 @Component({
   selector: 'app-home',
-  imports: [NavbarComponent, FooterComponent, SkillComponent, NgForOf],
+  imports: [FooterComponent, SkillComponent, TimelineComponent, NgForOf, SlicePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   standalone: true,
@@ -19,10 +25,18 @@ import { NgForOf } from '@angular/common';
 export class HomeComponent implements OnInit {
  aboutMe: AboutMe = new AboutMe();
  skills: Skill[] =  [];
- constructor(private aboutMeService: AboutMeService, private skillService: SkillService){}
+ whyhiremes: WhyHireMe[] = [];
+ projects: Project[] = [];
+ constructor(private aboutMeService: AboutMeService, 
+             private skillService: SkillService,
+             private whyhiremeservice: WhyHireMeService,
+             private projectService: ProjectService,
+             ){}
  ngOnInit(): void {
      this.getAboutMe();
      this.getSkill();
+     this.getWhyhireme();
+     this.getProject(); 
  }
 
  private getAboutMe(): void {
@@ -30,7 +44,6 @@ export class HomeComponent implements OnInit {
     next: (response: AboutMe[]) => {
       if (response.length > 0) {
         this.aboutMe = new AboutMe(response[0]);
-        console.log(this.aboutMe)
       }
     },
     error: (error: Error) => {
@@ -43,7 +56,28 @@ private getSkill(): void {
   this.skillService.getSkills().subscribe({
     next: (response: any) => {
       this.skills = response.data
-      console.log('Les Skills',this.skills)
+    },
+    error: (error: Error) => {
+      console.error('Error of the data backup:',error)
+    }
+  })
+}
+
+private getWhyhireme(): void {
+  this.whyhiremeservice.getWhyHireMes().subscribe({
+    next:(response: any) =>{
+      this.whyhiremes = response.data
+    },
+    error: (error: Error) => {
+      console.error('Error of the data backup:',error)
+    }
+  })
+}
+
+private getProject(): void {
+  this.projectService.getProjects().subscribe({
+    next:(response: any) =>{
+      this.projects = response.data
     },
     error: (error: Error) => {
       console.error('Error of the data backup:',error)

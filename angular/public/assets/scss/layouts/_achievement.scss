@@ -1,4 +1,25 @@
 /* achievement */
+.tab-content{
+    .tab-activity-pane {
+        @include ease3;
+        display: none !important;
+    }
+    .tab-activity-pane.tab-active {
+        display: block !important;
+    }
+}
+.bix-tab.active {
+    @include ease3;
+    background-color: $black-off;
+    color: #fff;
+}
+.tab-activity-pane {
+    @include ease3;
+}
+.bix-tab {
+    @include ease3;
+    border-radius: 15px;
+}
 .section-achievement {
     &:before {
         content: "";

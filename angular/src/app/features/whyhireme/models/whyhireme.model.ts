@@ -3,5 +3,6 @@ export interface WhyHireMe {
     icon: string;
     title: string;
     description: string;
+    color: string;
   }
   

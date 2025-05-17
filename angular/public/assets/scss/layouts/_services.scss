@@ -13,15 +13,13 @@
         z-index: -1;
     }
 }
-.inner-image {
-    .ring {
-        box-shadow: none;
-    }
-}
 
 .bix-services {
     .services-image {
         .inner-image {
+            .ring {
+                box-shadow: none;
+            }
             &:after {
                 content: "";
                 height: 40px;

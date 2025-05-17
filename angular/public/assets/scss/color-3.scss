@@ -25,6 +25,15 @@
         }
     }
 }
+.bix-main-menu {
+    ul {
+        li.active {
+            > a {
+                color: $color-3;
+            }
+        }
+    }
+}
 .bix-project-card {
     .project-contact {
         h5 {

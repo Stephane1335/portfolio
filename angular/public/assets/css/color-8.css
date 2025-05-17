@@ -14,6 +14,10 @@
   color: #607d8b;
 }
 
+.bix-main-menu ul li.active > a {
+  color: #607d8b;
+}
+
 .bix-project-card .project-contact h5 a:hover {
   color: #607d8b;
 }

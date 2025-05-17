@@ -21,18 +21,24 @@ Copyright 2024
     - header
     - footer
     - common
-    - tools-sidebar
 
 04. Layout 
     - hero
+    - about
     - achievement
+    - projects
     - services
+    - hire
     - testimonials
     - blog
     - modal
 
 05. Pages
-    - about
+    - prices
+    - faq
+    - resume
+    - single-projects
+    - blog-detail
 
 -----------------------------------------------------------------------------------*/
 
@@ -51,11 +57,11 @@ Copyright 2024
 
 /* Layouts ( Import Layouts ) */
 @import "layouts/_hero";
+@import "layouts/_about";
 @import "layouts/_achievement";
 @import "layouts/_services";
 @import "layouts/_testimonials";
 @import "layouts/_blog";
 @import "layouts/_modal";
 
-/* Pages ( Import Pages ) */
-@import "pages/_about";
+

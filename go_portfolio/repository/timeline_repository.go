@@ -12,12 +12,7 @@ import (
 
 // TimelineResponse define the response structure
 type TimelineResponse struct {
-	Data     []bson.M `json:"data"`
-	Metadata struct {
-		Total    int `json:"total"`
-		Page     int `json:"page"`
-		PageSize int `json:"page_size"`
-	} `json:"metadata"`
+	Data []bson.M `json:"data"`
 }
 
 // TimelineRepository définit l'interface pour les opérations sur les Timelines
@@ -72,15 +67,6 @@ func (r *timelineRepository) GetTheTimeline(ctx context.Context, page, pageSize 
 	// Création de la réponse structurée
 	response := &TimelineResponse{
 		Data: results,
-		Metadata: struct {
-			Total    int `json:"total"`
-			Page     int `json:"page"`
-			PageSize int `json:"page_size"`
-		}{
-			Total:    len(results),
-			Page:     page,
-			PageSize: pageSize,
-		},
 	}
 
 	return response, nil

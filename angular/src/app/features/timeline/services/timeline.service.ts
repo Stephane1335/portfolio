@@ -9,7 +9,7 @@ import { environment } from '../../../../environnements/environnement';
   providedIn: 'root'
 })
 export class TimelineService {
-  private apiUrl = `${environment.apiUrl}/timeline`;
+  private apiUrl = `${environment.apiUrl}/timelines`;
 
   constructor(private http: HttpClient) {}
 

@@ -46,9 +46,6 @@ func (c *WhyHireMeController) GetTheWhyHireMe(ctx *gin.Context) {
 		return
 	}
 
-	// Configuration des headers
-	ctx.Header("X-Total-Count", fmt.Sprintf("%d", response.Metadata.Total))
-
 	// Envoi de la réponse
 	ctx.JSON(http.StatusOK, response)
 }

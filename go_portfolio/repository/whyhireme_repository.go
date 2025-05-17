@@ -12,12 +12,7 @@ import (
 
 // WhyHireMeResponse define the response structure
 type WhyHireMeResponse struct {
-	Data     []bson.M `json:"data"`
-	Metadata struct {
-		Total    int `json:"total"`
-		Page     int `json:"page"`
-		PageSize int `json:"page_size"`
-	} `json:"metadata"`
+	Data []bson.M `json:"data"`
 }
 
 // WhyHireMeRepository définit l'interface pour les opérations sur les WhyHireMes
@@ -72,15 +67,6 @@ func (r *whyhiremeRepository) GetTheWhyHireMe(ctx context.Context, page, pageSiz
 	// Création de la réponse structurée
 	response := &WhyHireMeResponse{
 		Data: results,
-		Metadata: struct {
-			Total    int `json:"total"`
-			Page     int `json:"page"`
-			PageSize int `json:"page_size"`
-		}{
-			Total:    len(results),
-			Page:     page,
-			PageSize: pageSize,
-		},
 	}
 
 	return response, nil

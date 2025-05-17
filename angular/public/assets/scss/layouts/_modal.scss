@@ -16,7 +16,6 @@
         transform: translateY(3rem);
     }
 }
-
 ul#contact_tabs {
     li.active {
         a {
@@ -29,6 +28,13 @@ ul#contact_tabs {
 
 .bix-modal {
     transform: translate(-50%, -50%);
+        .tab-popup {
+            @include ease3;
+            display: none !important;
+        }
+        .tab-popup.tab-active-popup {
+            display: block !important;
+        }
 }
 
 .bix-overflow-hidden {

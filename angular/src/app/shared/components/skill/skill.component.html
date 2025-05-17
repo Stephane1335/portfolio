@@ -12,7 +12,7 @@
         </svg>
         <div class="skill-box-contact w-[calc(100%-90px)] p-[10px] flex flex-col justify-center max-[420px]:w-full">
             <h4 class="font-montserrat text-[16px] font-semibold text-[#111a24] mb-[8px] tracking-[0.03rem] leading-[1.2]">{{skill.title}} <span class="text-[13px] font-medium text-[#111a24]"> ({{skill.techno?.join(',')}}) </span></h4>
-            <p class="font-montserrat text-[13px] leading-[22px] text-[#495461] overflow-hidden tracking-[0.03rem] text-ellipsis flex">{{skill.description}}</p>
+            <p class="font-montserrat text-[13px] leading-[22px] text-[#495461] overflow-hidden tracking-[0.03rem] text-ellipsis flex">{{skill.description?.slice(0,50)}}...</p>
         </div>
     </div>
 </div>

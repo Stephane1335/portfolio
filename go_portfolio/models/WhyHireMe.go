@@ -9,4 +9,5 @@ type WhyHireMe struct {
 	Icon        string        `json:"icon,omitempty" bson:"icon,omitempty"`
 	Title       string        `json:"title,omitempty" bson:"title,omitempty"`
 	Description string        `json:"description,omitempty" bson:"description,omitempty"`
+	Color       string        `json:"color,omitempty" bson:"color,omitempty"`
 }
