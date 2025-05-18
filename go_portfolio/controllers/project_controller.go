@@ -24,6 +24,7 @@ func NewProjectController(service services.ProjectService) *ProjectController {
 func (c *ProjectController) GetTheProject(ctx *gin.Context) {
 	// Logging de la requête
 	fmt.Printf("Requête GET /Projects reçue\n")
+	fmt.Printf("Adresse IP du serveur: %s\n", ctx.ClientIP())
 
 	// Récupération des paramètres de pagination
 	pageStr := ctx.Query("page")
