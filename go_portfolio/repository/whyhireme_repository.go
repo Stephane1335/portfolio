@@ -50,7 +50,7 @@ func (r *whyhiremeRepository) GetTheWhyHireMe(ctx context.Context, page, pageSiz
 	opts := options.Find()
 	opts.SetSkip(int64((page - 1) * pageSize))
 	opts.SetLimit(int64(pageSize))
-
+	log.Println("La Trouvaille est", opts)
 	// Exécution de la requête
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
